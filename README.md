@@ -2,7 +2,7 @@
 
 ## Setup instructions
 
-The instructions below are written for RHEL 7 / Centos 7. Adapt as necessary for other distributions.
+The instructions below are for setting up the Infoblox Scalr Webhook
 
 ## create a folder for the webhook
 ```
