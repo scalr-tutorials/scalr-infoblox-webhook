@@ -6,9 +6,7 @@ The instructions below are written for RHEL 7 / Centos 7. Adapt as necessary for
 
 ## create a folder for the webhook
 ```
-mkdir -p /opt/infoblox-webhook
-cd /opt
-git clone https://github.com/scalr-tutorials/scalr-infoblox-webhook.git
+git clone https://github.com/scalr-tutorials/scalr-infoblox-webhook.git /opt/infoblox-webhook
 cd /opt/infoblox-webhook
 ```
 
