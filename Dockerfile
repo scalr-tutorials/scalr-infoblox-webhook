@@ -6,12 +6,12 @@ RUN apt-get update && \
     groupadd uwsgi && \
     useradd -g uwsgi uwsgi
 
-COPY ./requirements.txt /opt/ipam-webhook/
+COPY ./requirements.txt /opt/infoblox-webhook/
 
-RUN pip install -r /opt/ipam-webhook/requirements.txt
+RUN pip install -r /opt/infoblox-webhook/requirements.txt
 
-COPY . /opt/ipam-webhook
+COPY . /opt/infoblox-webhook
 
 EXPOSE 5020
 
-CMD ["/usr/bin/uwsgi", "--ini", "/opt/ipam-webhook/uwsgi.ini"]
+CMD ["/usr/bin/uwsgi", "--ini", "/opt/infoblox-webhook/uwsgi.ini"]
