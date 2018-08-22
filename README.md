@@ -4,12 +4,6 @@
 
 The instructions below are for setting up the Infoblox Scalr Webhook
 
-## create a folder for the webhook
-```
-git clone https://github.com/scalr-tutorials/scalr-infoblox-webhook.git /opt/infoblox-webhook
-cd /opt/infoblox-webhook
-```
-
 ## Scalr setup
 
 In Scalr, create a webhook endpoint with url:
@@ -27,6 +21,12 @@ Then, for each subnet that you intend to use with Scalr, create an IP Pool with 
 
 
 ## Configuration
+
+Create a folder for the webhook
+```
+git clone https://github.com/scalr-tutorials/scalr-infoblox-webhook.git /opt/infoblox-webhook
+cd /opt/infoblox-webhook
+```
 
 Create the configuration file:
 ```bash
