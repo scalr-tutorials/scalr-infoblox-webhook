@@ -20,9 +20,9 @@ app = Flask(__name__)
 
 # Configuration variables
 SCALR_SIGNING_KEY = os.getenv('SCALR_SIGNING_KEY', '')
-DOMAIN_GV = os.getenv('DOMAIN_GV', 'DOMAIN_NAME')
-BACKEND_ENDPOINT = os.getenv('BACKEND_ENDPOINT', 'https:SOME_INFOBLOX_URL')
-BACKEND_USER = os.getenv('BACKEND_USER', 'SOME_USERNAME')
+DOMAIN_GV = os.getenv('DOMAIN_GV', 'DOMAIN')
+BACKEND_ENDPOINT = os.getenv('BACKEND_ENDPOINT', '')
+BACKEND_USER = os.getenv('BACKEND_USER', '')
 BACKEND_PASS = os.getenv('BACKEND_PASS', '')
 BACKEND_VERIFY = os.getenv('BACKEND_VERIFY', 'true').lower() == 'true'
 # The maximum time allowed between the moment a request is signed and the moment the signature stops
@@ -59,10 +59,6 @@ def webhook_listener():
             subnet=data['userData'],
             host=data['data'].get('SCALR_SERVER_HOSTNAME'),
             domain=data['data'].get(DOMAIN_GV),
-            dev_type='VM',
-            description='{} - {}'.format(data['data'].get('SCALR_ROLE_NAME'), data['data'].get('ServerDescription')),
-            vendor=data['data'].get('SCALR_CLOUD_PLATFORM'),
-            location=data['data'].get('SCALR_CLOUD_LOCATION'),
         )
     elif data['eventName'] == 'DeregisterIpAddressRequest':
         # We are not using the IP address sent by Scalr
@@ -79,7 +75,7 @@ def webhook_listener():
         return jsonify({'success': False})
 
 
-def acquire_ip(subnet, host, domain, dev_type, description, vendor, location):
+def acquire_ip(subnet, host, domain):
     """ Send a call to the backend API to acquire an IP """
 
     if domain:
@@ -89,11 +85,7 @@ def acquire_ip(subnet, host, domain, dev_type, description, vendor, location):
 
     payload = {
         'name': fqdn.lower(),
-        'device_type': dev_type,
-        'device_description': description,
-        'device_vendor': vendor,
-        'device_location': location,
-        'configure_for_dns': False,
+        'configure_for_dns': True,
         'ipv4addrs': [
             {
                 'ipv4addr': 'func:nextavailableip:' + subnet

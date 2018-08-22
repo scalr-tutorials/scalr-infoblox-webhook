@@ -1,5 +1,5 @@
 FROM debian:jessie-slim
-MAINTAINER Aloÿs Augustin <aloys@scalr.com>
+MAINTAINER scalr@scalr.com
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends python python-dev python-pip uwsgi uwsgi-plugin-python && \
