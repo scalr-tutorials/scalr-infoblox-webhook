@@ -44,8 +44,10 @@ Edit `uwsgi.ini` to set the configuration variables:
 * `BACKEND_VERIFY`: set to true/false if you want the Infoblox certificate to be checked (if invalid, the webhook will refuse to communicate with Infoblox)
 
 ## Install docker the webhook Server
+```
 curl -fsSL https://get.docker.com/ | sh
 service docker start || systemctl start docker
+```
 
 ## Run with Docker
 
