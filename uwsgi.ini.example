@@ -1,0 +1,15 @@
+[uwsgi]
+chdir = /opt/ipam-webhook
+http-socket = 0.0.0.0:5020
+wsgi-file = webhook.py
+callable = app
+workers = 5
+master = true
+uid = uwsgi
+die-on-term = true
+plugin = python
+env = SCALR_SIGNING_KEY=<ENTER_SCALR_WEBOOK_SIGNING_KEY>
+env = BACKEND_USER=<ENTER_INFOBLOX_USERNAME_HERE>
+env = BACKEND_PASS=<ENTER_INFOBLOX_PW_HERE>
+# Comment the following line if the certificate of the endpoint is publicly trusted
+env = BACKEND_VERIFY=false
