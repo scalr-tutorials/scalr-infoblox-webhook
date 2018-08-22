@@ -5,8 +5,10 @@
 The instructions below are written for RHEL 7 / Centos 7. Adapt as necessary for other distributions.
 
 ## create a folder for the webhook
+```
 mkdir -p /opt/infoblox-webhook
 git clone https://github.com/scalr-tutorials/scalr-infoblox-webhook.git
+```
 
 ## Scalr setup
 
