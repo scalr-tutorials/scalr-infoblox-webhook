@@ -4,29 +4,9 @@
 
 The instructions below are written for RHEL 7 / Centos 7. Adapt as necessary for other distributions.
 
-#### Webhook handler setup
-
-- Install the required packages:
-```
-yum install epel-release
-yum install git gcc python python-devel python-pip uwsgi uwsgi-plugin-python
-```
-- Retrieve the webhook code:
-```
+## create a folder for the webhook
 mkdir -p /opt/infoblox-webhook
-cd /opt/infoblox-webhook
-git clone https://github.com/scalr-tutorials/scalr-infoblox-webhook.git .
-```
-- Install the Python dependencies
-```
-pip install -r requirements.txt
-```
-- Configure uwsgi to serve the webhook
-```
-cp uwsgi.ini /etc/uwsgi.d/infoblox-webhook.ini
-chown uwsgi:uwsgi /etc/uwsgi.d/infoblox-webhook.ini
-systemctl enable uwsgi
-```
+git clone https://github.com/scalr-tutorials/scalr-infoblox-webhook.git
 
 ## Scalr setup
 
