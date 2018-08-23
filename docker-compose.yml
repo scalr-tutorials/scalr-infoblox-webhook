@@ -1,0 +1,7 @@
+version: '3'
+services:
+  infoblox-webhook:
+    build: .
+    container_name: infoblox-webhook
+    ports:
+      - "5020:5020"
