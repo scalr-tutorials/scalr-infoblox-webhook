@@ -55,21 +55,39 @@ def webhook_listener():
         abort(400)
 
     if data['eventName'] == 'AllocateIpAddressRequest':
-        return acquire_ip(
-            subnet=data['userData'],
-            host=data['data'].get('SCALR_SERVER_HOSTNAME'),
-            domain=data['data'].get(DOMAIN_GV),
-            dev_type='VM',
-            description='{} - {}'.format(data['data'].get('SCALR_ROLE_NAME'), data['data'].get('ServerDescription')),
-            vendor=data['data'].get('SCALR_CLOUD_PLATFORM'),
-            location=data['data'].get('SCALR_CLOUD_LOCATION'),
-        )
+        if 'INFOBLOX_STATIC' in data['data']:
+            logging.info("setup for a static IP")
+            return static_ip(
+                subnet=data['userData'],
+                host=data['data'].get('SCALR_SERVER_HOSTNAME'),
+                domain=data['data'].get(DOMAIN_GV),
+                staticip=data['data'].get('INFOBLOX_STATIC'),
+                dev_type='VM',
+                description='{} - {}'.format(data['data'].get('SCALR_ROLE_NAME'), data['data'].get('ServerDescription')),
+                vendor=data['data'].get('SCALR_CLOUD_PLATFORM'),
+                location=data['data'].get('SCALR_CLOUD_LOCATION'),
+            )
+        else:
+            return acquire_ip(
+                subnet=data['userData'],
+                host=data['data'].get('SCALR_SERVER_HOSTNAME'),
+                domain=data['data'].get(DOMAIN_GV),
+                dev_type='VM',
+                description='{} - {}'.format(data['data'].get('SCALR_ROLE_NAME'), data['data'].get('ServerDescription')),
+                vendor=data['data'].get('SCALR_CLOUD_PLATFORM'),
+                location=data['data'].get('SCALR_CLOUD_LOCATION'),
+            )
+
     elif data['eventName'] == 'DeregisterIpAddressRequest':
         # We are not using the IP address sent by Scalr
-        return release_ip(
-            host=data['data'].get('SCALR_SERVER_HOSTNAME'),
-            domain=data['data'].get(DOMAIN_GV),
-        )
+        if 'INFOBLOX_STATIC' in data['data']:
+            logging.info("setup for a static IP")
+            return jsonify({'success': True})
+        else:
+            return release_ip(
+                host=data['data'].get('SCALR_SERVER_HOSTNAME'),
+                domain=data['data'].get(DOMAIN_GV),
+            )
     elif data['eventName'] == 'RegisterIpAddressRequest':
         # We don't need to handle this event as we already register the IP during the allocate operation
         logging.info("Ignoring Register call for address %s", data['data'].get('SCALR_IP_ADDRESS'))
@@ -77,7 +95,6 @@ def webhook_listener():
     else:
         logging.warn('Received request for unhandled event %s', data['eventName'])
         return jsonify({'success': False})
-
 
 def acquire_ip(subnet, host, domain, dev_type, description, vendor, location):
     """ Send a call to the backend API to acquire an IP """
@@ -171,6 +188,13 @@ def release_ip(host, domain):
     logging.info('Released IP for server %s! Server returned: %s', fqdn, data)
     return jsonify({'success': True})
 
+def static_ip(subnet, host, domain, staticip, dev_type, description, vendor, location):
+    webhook_response = {
+        'success': True,
+        'ip_address': staticip,
+     }
+    logging.debug('Returning payload to scalr server: %s', webhook_response)
+    return jsonify(webhook_response)
 
 @app.route('/sample/<path:path>', methods=['GET', 'POST'])
 def test_route(path):
